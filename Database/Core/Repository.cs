@@ -2,7 +2,7 @@
 
 public class Repository<T> where T : class
 {
-    private LinkedList<T> _list = [];
+    private readonly LinkedList<T> _list = [];
 
     public T Add(T item)
     {

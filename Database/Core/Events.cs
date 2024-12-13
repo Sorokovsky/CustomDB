@@ -5,7 +5,7 @@ public class Events
     public delegate void Operation(object data);
 
     public event Operation PreCreated;
-    
+
     public event Operation Created;
 
     public void OnPreCreated(object data)
