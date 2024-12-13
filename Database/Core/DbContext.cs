@@ -2,5 +2,4 @@
 
 public class DbContext
 {
-    public static Events Events = new();
 }

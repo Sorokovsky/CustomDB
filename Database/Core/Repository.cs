@@ -6,9 +6,9 @@ public class Repository<T> where T : class
 
     public T Add(T item)
     {
-        DbContext.Events.OnPreCreated(item);
+        DbEvents.OnPreCreated(item);
         var result = _list.AddLast(item).Value;
-        DbContext.Events.OnCreated(result);
+        DbEvents.OnCreated(result);
         return result;
     }
 }
