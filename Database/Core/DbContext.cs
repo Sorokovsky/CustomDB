@@ -1,5 +1,5 @@
 ﻿namespace Database.Core;
 
-public class DbContext
+public abstract class DbContext
 {
 }

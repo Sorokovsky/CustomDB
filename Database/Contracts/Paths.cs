@@ -18,16 +18,11 @@ public static class Paths
         return $"{folder}\\{fileName}.dat";
     }
 
-    public static string GetPrimaryKeyPath(string fileName)
+    public static string GetKeyPath()
     {
-        var folder = $"{BasePath}\\keys\\primary";
-        return $"{folder}\\{fileName}.dat";
-    }
-
-    public static string GetForeignPath(string fileName)
-    {
-        var folder = $"{BasePath}\\keys\\foreign";
-        return $"{folder}\\{fileName}.dat";
+        var folder = $"{BasePath}\\constrains";
+        CreateFolderIfNotExists(folder);
+        return $"{folder}\\keys.dat";
     }
 
     private static void CreateFolderIfNotExists(string folder)
