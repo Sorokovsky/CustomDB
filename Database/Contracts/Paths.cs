@@ -6,21 +6,38 @@ public static class Paths
 
     public static string GetTablePath(string fileName)
     {
-        return $"{BasePath}/tables/{fileName}.dat";
+        var folder = $"{BasePath}\\tables";
+        CreateFolderIfNotExists(folder);
+        return $"{folder}\\{fileName}.dat";
     }
 
     public static string GetLastKeyPath(string fileName)
     {
-        return $"{BasePath}/lastKey/{fileName}.dat";
+        var folder = $"{BasePath}\\lastKey";
+        CreateFolderIfNotExists(folder);
+        return $"{folder}\\{fileName}.dat";
     }
 
     public static string GetPrimaryKeyPath(string fileName)
     {
-        return $"{BasePath}/keys/primary/{fileName}.dat";
+        var folder = $"{BasePath}\\keys\\primary";
+        return $"{folder}\\{fileName}.dat";
     }
 
     public static string GetForeignPath(string fileName)
     {
-        return $"{BasePath}/keys/foreign/{fileName}.dat";
+        var folder = $"{BasePath}\\keys\\foreign";
+        return $"{folder}\\{fileName}.dat";
+    }
+
+    private static void CreateFolderIfNotExists(string folder)
+    {
+        var folders = folder.Split("\\");
+        var result = string.Empty;
+        foreach (var directory in folders)
+        {
+            result += directory + "\\";
+            if (Directory.Exists(result) == false) Directory.CreateDirectory(result);
+        }
     }
 }

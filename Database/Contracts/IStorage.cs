@@ -1,6 +1,6 @@
 ﻿namespace Database.Contracts;
 
-public interface IStorage<T> where T : class
+public interface IStorage<T>
 {
     public void Save(T data);
 

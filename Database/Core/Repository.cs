@@ -3,7 +3,7 @@ using Database.Services;
 
 namespace Database.Core;
 
-public class Repository<T> where T : class
+public class Repository<T>
 {
     public delegate bool IsNeed(T item);
 
