@@ -5,12 +5,10 @@ namespace Database.Core;
 
 public class Repository<T> where T : class
 {
-    private readonly IStorage<LinkedList<T>> _storage;
-    private LinkedList<T> _list = [];
-
     public delegate bool IsNeed(T item);
 
-    public IReadOnlyList<T> List => _list.ToList();
+    private readonly IStorage<LinkedList<T>> _storage;
+    private LinkedList<T> _list = [];
 
     public Repository(string tableName)
     {
@@ -18,11 +16,13 @@ public class Repository<T> where T : class
         Load();
     }
 
+    public IReadOnlyList<T> List => _list.ToList();
+
     public T Add(T item)
     {
         DbEvents.OnPreCreated(item);
         var result = _list.AddLast(item).Value;
-        DbEvents.OnCreated(result);
+        DbEvents.OnPostCreated(result);
         Save();
         return result;
     }
@@ -36,18 +36,14 @@ public class Repository<T> where T : class
     {
         var candidates = Find(predicate);
         if (candidates.Count == 0)
-        {
             DbEvents.OnNotRemoved($"{typeof(T).Name} for deleting not found.");
-        }
         else
-        {
             candidates.ToList().ForEach(x =>
             {
                 DbEvents.OnPreRemoved(x);
                 _list.Remove(x);
-                DbEvents.OnRemoved(x);
+                DbEvents.OnPostRemoved(x);
             });
-        }
         Save();
     }
 

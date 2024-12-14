@@ -2,17 +2,17 @@
 
 public class DbEvents
 {
-    public delegate void Operation(object data);
-
     public delegate void ErrorHandler(string reason);
+
+    public delegate void Operation(object data);
 
     public static event Operation PreCreated;
 
-    public static event Operation Created;
+    public static event Operation PostCreated;
 
     public static event Operation PreRemoved;
 
-    public static event Operation Removed;
+    public static event Operation PostRemoved;
 
     public static event ErrorHandler NotRemoved;
 
@@ -21,14 +21,14 @@ public class DbEvents
         PreCreated?.Invoke(data);
     }
 
-    public static void OnCreated(object data)
+    public static void OnPostCreated(object data)
     {
-        Created?.Invoke(data);
+        PostCreated?.Invoke(data);
     }
 
-    public static void OnRemoved(object data)
+    public static void OnPostRemoved(object data)
     {
-        Removed?.Invoke(data);
+        PostRemoved?.Invoke(data);
     }
 
     public static void OnPreRemoved(object data)
