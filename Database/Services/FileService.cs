@@ -3,7 +3,7 @@ using Database.Contracts;
 
 namespace Database.Services;
 
-public class FileService<T> : IStorage<T> where T : class
+public class FileService<T> : IStorage<T>
 {
     private readonly string _filePath;
 
@@ -33,6 +33,6 @@ public class FileService<T> : IStorage<T> where T : class
             return data;
         }
 
-        return null;
+        return default;
     }
 }

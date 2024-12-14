@@ -8,7 +8,7 @@ public abstract class Attribute : System.Attribute
 
     public MemberInfo? Member { get; private set; }
 
-    public void Construct(Type? parent, MemberInfo? memberInfo)
+    public virtual void Construct(Type? parent, MemberInfo? memberInfo)
     {
         Parent = parent;
         Member = memberInfo;

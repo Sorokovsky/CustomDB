@@ -1,11 +1,35 @@
 ﻿using System.Reflection;
 using Database.Constrains.Key;
+using Database.Constrains.Key.Generation;
+using Database.Contracts;
+using Database.Core;
+using Database.Services;
 
 namespace Database.Attributes;
 
 [AttributeUsage(AttributeTargets.Property)]
 public class KeyAttribute : Attribute
 {
+    private Incremental _generator;
+    private IStorage<int> _storage;
+
+    public KeyAttribute()
+    {
+        DbEvents.PreCreated += OnCreated;
+    }
+
+    ~KeyAttribute()
+    {
+        DbEvents.PreCreated -= OnCreated;
+    }
+
+    public override void Construct(Type? parent, MemberInfo? memberInfo)
+    {
+        base.Construct(parent, memberInfo);
+        _storage = new FileService<int>(Paths.GetLastKeyPath($"{Parent?.Name}.{Member?.Name}"));
+        _generator = new Incremental(_storage.Load());
+    }
+
     public override void Process()
     {
         var property = ConvertMemberToProperty();
@@ -14,7 +38,15 @@ public class KeyAttribute : Attribute
         manager.Add(key);
     }
 
-    public PropertyInfo ConvertMemberToProperty()
+    private void OnCreated(object data)
+    {
+        var property = ConvertMemberToProperty();
+        var lastKey = _generator.Current;
+        property.SetValue(data, lastKey);
+        _storage.Save(lastKey);
+    }
+
+    private PropertyInfo ConvertMemberToProperty()
     {
         return (PropertyInfo)Member!;
     }
