@@ -1,6 +1,8 @@
-﻿namespace Database.Constrains.Key.Generation;
+﻿using Database.Contracts;
 
-public class Incremental
+namespace Database.Constrains.Key.Generation;
+
+public class Incremental : IKeyGenerator<int>
 {
     private int _initial;
 

@@ -10,7 +10,7 @@ namespace Database.Attributes;
 [AttributeUsage(AttributeTargets.Property)]
 public class KeyAttribute : Attribute
 {
-    private Incremental _generator;
+    private IKeyGenerator<int> _generator;
     private IStorage<int> _storage;
 
     ~KeyAttribute()
