@@ -5,6 +5,8 @@ namespace Database.Constrains.Key;
 
 public class KeysManager
 {
+    private static KeysManager? _instance;
+
     private readonly LinkedList<Key> _list;
     private readonly IStorage<LinkedList<Key>> _storage;
 
@@ -14,12 +16,23 @@ public class KeysManager
         _list = _storage.Load() ?? [];
     }
 
+    public static KeysManager Instance => Singleton();
+
     public IReadOnlyList<Key> List => _list.ToList();
+
+    private static KeysManager Singleton()
+    {
+        if (_instance == null) _instance = new KeysManager();
+        return _instance;
+    }
 
     public void Add(Key item)
     {
-        _list.AddLast(item);
-        _storage.Save(_list);
+        if (_list.Contains(item) == false)
+        {
+            _list.AddLast(item);
+            _storage.Save(_list);
+        }
     }
 
     public void Remove(Key item)
