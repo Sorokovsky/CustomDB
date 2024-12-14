@@ -20,9 +20,9 @@ public class Repository<T>
 
     public T Add(T item)
     {
-        DbEvents.OnPreCreated(item);
+        DbEvents.OnPreCreated(item!);
         var result = _list.AddLast(item).Value;
-        DbEvents.OnPostCreated(result);
+        DbEvents.OnPostCreated(result!);
         Save();
         return result;
     }
@@ -43,9 +43,9 @@ public class Repository<T>
         {
             candidates.ToList().ForEach(x =>
             {
-                DbEvents.OnPreRemoved(x);
+                DbEvents.OnPreRemoved(x!);
                 _list.Remove(x);
-                DbEvents.OnPostRemoved(x);
+                DbEvents.OnPostRemoved(x!);
             });
             Save();
         }
@@ -62,9 +62,9 @@ public class Repository<T>
         {
             candidates.ToList().ForEach(x =>
             {
-                DbEvents.OnPreUpdated(x, updated);
+                DbEvents.OnPreUpdated(x!, updated!);
                 _list.Find(x)!.Value = updated;
-                DbEvents.OnPostUpdated(updated);
+                DbEvents.OnPostUpdated(updated!);
             });
             Save();
         }
