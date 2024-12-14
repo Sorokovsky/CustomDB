@@ -5,9 +5,8 @@ namespace Database.Constrains.Key;
 
 public class KeysManager
 {
-    private readonly IStorage<LinkedList<Key>> _storage;
-
     private readonly LinkedList<Key> _list;
+    private readonly IStorage<LinkedList<Key>> _storage;
 
     public KeysManager()
     {
@@ -15,8 +14,17 @@ public class KeysManager
         _list = _storage.Load() ?? [];
     }
 
-    public void Add(Key key)
+    public IReadOnlyList<Key> List => _list.ToList();
+
+    public void Add(Key item)
     {
-        var candidates = _list.Where(x => x == key).ToList();
+        _list.AddLast(item);
+        _storage.Save(_list);
+    }
+
+    public void Remove(Key item)
+    {
+        _list.Remove(item);
+        _storage.Save(_list);
     }
 }
