@@ -27,7 +27,7 @@ public class Repository<T> where T : class
         return result;
     }
 
-    private IReadOnlyList<T> Find(IsNeed predicate)
+    public IReadOnlyList<T> Find(IsNeed predicate)
     {
         return List.Where(predicate.Invoke).ToList();
     }
@@ -36,15 +36,38 @@ public class Repository<T> where T : class
     {
         var candidates = Find(predicate);
         if (candidates.Count == 0)
+        {
             DbEvents.OnNotRemoved($"{typeof(T).Name} for deleting not found.");
+        }
         else
+        {
             candidates.ToList().ForEach(x =>
             {
                 DbEvents.OnPreRemoved(x);
                 _list.Remove(x);
                 DbEvents.OnPostRemoved(x);
             });
-        Save();
+            Save();
+        }
+    }
+
+    public void Update(IsNeed predicate, T updated)
+    {
+        var candidates = Find(predicate);
+        if (candidates.Count == 0)
+        {
+            DbEvents.OnNotUpdated($"{typeof(T).Name} not found to update.");
+        }
+        else
+        {
+            candidates.ToList().ForEach(x =>
+            {
+                DbEvents.OnPreUpdated(x, updated);
+                _list.Find(x)!.Value = updated;
+                DbEvents.OnPostUpdated(updated);
+            });
+            Save();
+        }
     }
 
     private void Save()
