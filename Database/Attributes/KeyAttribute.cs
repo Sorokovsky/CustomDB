@@ -13,11 +13,6 @@ public class KeyAttribute : Attribute
     private Incremental _generator;
     private IStorage<int> _storage;
 
-    public KeyAttribute()
-    {
-        DbEvents.PreCreated += OnCreated;
-    }
-
     ~KeyAttribute()
     {
         DbEvents.PreCreated -= OnCreated;
@@ -28,6 +23,7 @@ public class KeyAttribute : Attribute
         base.Construct(parent, memberInfo);
         _storage = new FileService<int>(Paths.GetLastKeyPath($"{Parent?.Name}.{Member?.Name}"));
         _generator = new Incremental(_storage.Load());
+        DbEvents.PreCreated += OnCreated;
     }
 
     public override void Process()
