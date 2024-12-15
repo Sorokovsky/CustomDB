@@ -4,11 +4,10 @@ namespace Database.Core;
 
 public abstract class DbContext
 {
-    private readonly AttributeManager _attributeManager;
+    private readonly AttributeManager _attributeManager = new();
 
-    public DbContext()
+    protected DbContext()
     {
-        _attributeManager = new AttributeManager();
         _attributeManager.ExecuteAttributes();
     }
 }
